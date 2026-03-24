@@ -1,5 +1,12 @@
 # 01 - Backend Folder Structure
 
+
+first type in the terminal 
+
+```bash
+npm init -y
+```
+
 A basic backend server built with **Node.js** and **Express.js**.  
 This project shows how to properly structure a backend project with separate files for the server and app logic.
 
