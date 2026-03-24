@@ -1,3 +1,71 @@
+---
+
+## ImageKit Integration
+
+ImageKit is a cloud-based image and file storage service. In this project, it is used to store uploaded images securely and efficiently.
+
+### Why use ImageKit?
+- Secure and fast image storage
+- Easy integration with Node.js
+- Returns a public URL for each uploaded image
+
+### How to Set Up ImageKit
+
+1. **Create an ImageKit account:**
+   - Go to https://imagekit.io/ and sign up for a free account.
+2. **Get your Private API Key:**
+   - In the ImageKit dashboard, go to the Developer section and copy your Private API Key.
+3. **Add your key to `.env`:**
+   ```env
+   IMAGEKIT_PRIVATE_KEY=your_imagekit_private_key
+   ```
+
+### Install ImageKit SDK
+
+In your backend folder, run:
+```
+npm install @imagekit/nodejs
+```
+
+### How ImageKit is Used in Code
+
+**src/services/storage.services.js:**
+```js
+const ImageKit = require("@imagekit/nodejs/index.js");
+
+const client = new ImageKit({
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+});
+
+async function uploadFile(buffer) {
+  const result = await client.files.upload({
+    file: buffer.toString("base64"),
+    fileName: `image.jpg`,
+  });
+  return result;
+}
+
+module.exports = uploadFile;
+```
+
+**How it works:**
+- The `uploadFile` function takes an image buffer, uploads it to ImageKit, and returns the result (including the image URL).
+- The private key is loaded securely from your `.env` file.
+
+**In your API route (src/app.js):**
+```js
+app.post('/create-post', upload.single('image'), async (req, res) => {
+   const result = await uploadFile(req.file.buffer);
+   const post = await postModel.create({
+     image: result.url,
+     caption: req.body.caption
+   });
+   return res.status(201).json({ message: "post create sucessfully ", post });
+});
+```
+
+---
+
 # Backend API Project (Simple Instagram-like)
 
 A Node.js + Express backend for uploading posts with images and captions, storing data in MongoDB, and serving APIs to create and fetch posts.
@@ -191,45 +259,6 @@ backend/
 ---
 
 If you need more details or want to add usage examples, let me know!
-
-### 1) Server start (`server.js`)
-
-- Loads environment variables with `dotenv`
-- Imports Express app from `src/app.js`
-- Connects MongoDB using `connectDB()`
-- Starts server on port `3001`
-
-### 2) Database connection (`src/database/db.js`)
-
-- Uses `mongoose.connect(process.env.MONGO_URI)`
-- Logs success message when connected
-
-### 3) Post schema (`src/model/post.model.js`)
-
-- Defines `postSchema` with:
-  - `image: String`
-  - `caption: String`
-- Creates `postModel`
-
-### 4) Image upload service (`src/services/storage.services.js`)
-
-- Creates ImageKit client with `IMAGEKIT_PRIVATE_KEY`
-- Uploads image buffer (base64) to ImageKit
-- Returns upload result (including URL)
-
-### 5) API routes (`src/app.js`)
-
-- `POST /create-post`
-  - Accepts one file with field name `image`
-  - Accepts text field `caption`
-  - Uploads image to ImageKit
-  - Saves `{ image: result.url, caption }` in MongoDB
-  - Returns created post
-- `GET /posts`
-  - Fetches all posts from MongoDB
-  - Returns list of posts
-
-## Installation and Setup
 
 ### 1) Clone and move into project
 
