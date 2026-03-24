@@ -1,10 +1,20 @@
 # 01 - Backend Folder Structure
 
 
-first type in the terminal 
+1. first type in the terminal 
 
 ```bash
 npm init -y
+```
+
+2.  then type in the terminal 
+```bash
+npm i express
+```
+3. then type 
+
+```bah
+npm i nodemon
 ```
 
 A basic backend server built with **Node.js** and **Express.js**.  
