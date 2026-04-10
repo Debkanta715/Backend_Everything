@@ -33,7 +33,7 @@ npm install
 ```
 
 Main packages used:
-
+- mongoose 
 - express
 - mongoose
 - dotenv
